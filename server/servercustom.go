@@ -22,10 +22,11 @@ func ServerCustom(r *gin.Engine) *http.Server {
 
 func UpdateCors() cors.Config {
 	corsConfig := cors.Config{
-		AllowAllOrigins:  true, // Allow all origins
+		// AllowAllOrigins:  true, // Allow all origins
+		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
 		AllowHeaders:     []string{"X-Requested-With", "Authorization", "Origin", "Content-Length", "Content-Type"},
-		AllowCredentials: false,
+		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}
 	return corsConfig

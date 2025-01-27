@@ -17,13 +17,14 @@ var sem *semaphore.Weighted
 func RunServer() {
 	r := gin.Default()
 
+	//Config the server and cors
+	corsConfig := UpdateCors()
+	r.Use(cors.New(corsConfig))
+
 	//Setup the router
 	setupRouter(r)
 
-	//Config the server and cors
 	server := ServerCustom(r)
-	corsConfig := UpdateCors()
-	r.Use(cors.New(corsConfig))
 
 	if err := server.ListenAndServe(); err != nil {
 		panic(err)
@@ -41,9 +42,15 @@ func setupRouter(r *gin.Engine) {
 
 	//For SPA frontend to work like React, Angular, Vue
 	r.Static("/static", "./public")
+	// r.Static("/videos", "./videos")
 
 	//Serve the video hls files
-	r.StaticFS("/videos", http.Dir("/videos"))
+	r.StaticFS("/videos", http.Dir("./videos"))
+
+	//test cors
+	r.GET("/testcors", func(c *gin.Context) {
+		c.JSON(200, gin.H{"message": "CORS is working!"})
+	})
 
 	//Handle not found routes
 	r.NoRoute(handleNotFound)

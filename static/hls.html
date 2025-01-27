@@ -1,0 +1,28 @@
+<html>
+<head>
+    <title>HLS Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+    <video id="video" controls></video>
+    <script>
+        if (Hls.isSupported()) {
+            const video = document.getElementById('video');
+            const hls = new Hls();
+            console.log('HLS supported...........');
+            hls.loadSource('http://localhost:8080/videos/mp4test.m3u8');
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                video.play();
+            });
+        }else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            // Fallback for native HLS support (e.g., Safari)
+            console.log('Native HLS support...........');
+            video.src = 'http://localhost:8080/videos/mp4test.m3u8';
+            video.addEventListener('loadedmetadata', function () {
+                video.play();
+            });
+        }
+    </script>
+</body>
+</html>
